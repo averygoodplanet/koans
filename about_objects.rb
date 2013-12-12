@@ -26,30 +26,35 @@ class AboutObjects < Neo::Koan
     # appears that every object has an id, e.g. x.object_id = large integer
     # and nil.object_id is 8.
     # x.object_id.class is Fixnum.
-    assert_equal __, obj.object_id.class
+    #A Fixnum holds Integer values that can be represented in a native machine word (minus 1 bit).
+    assert_equal Fixnum, obj.object_id.class
   end
 
   def test_every_object_has_different_id
     obj = Object.new
     another_obj = Object.new
-    assert_equal __, obj.object_id != another_obj.object_id
+    # it should be true that "the object ids aren't the same"
+    assert_equal true, obj.object_id != another_obj.object_id
   end
 
   def test_small_integers_have_fixed_ids
-    assert_equal __, 0.object_id
-    assert_equal __, 1.object_id
-    assert_equal __, 2.object_id
-    assert_equal __, 100.object_id
+    assert_equal 1, 0.object_id
+    assert_equal 3, 1.object_id
+    assert_equal 5, 2.object_id
+    assert_equal 201, 100.object_id
 
     # THINK ABOUT IT:
     # What pattern do the object IDs for small integers follow?
+    # where n is the number, n.object_id = (2n+1)
   end
 
   def test_clone_creates_a_different_object
     obj = Object.new
+    #Produces a shallow copy of obj—the instance variables of obj are copied,
+    #but not the objects they reference. Copies the frozen and tainted state of obj.
     copy = obj.clone
 
-    assert_equal __, obj           != copy
-    assert_equal __, obj.object_id != copy.object_id
+    assert_equal true, obj != copy
+    assert_equal true, obj.object_id != copy.object_id
   end
 end
