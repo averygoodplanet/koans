@@ -115,24 +115,28 @@ class AboutHashes < Neo::Koan
     #hash[:one]  creates hash[:one] as default, e.g. []
     hash[:one] << "uno" #appends "uno" to empty array
     # hash[:one] => ["uno"]
+    # now hash.default is ["uno"]
     hash[:two] << "dos"
+    # now hash.default is ["uno", "dos"]
+    # hash is still {}
 
     assert_equal ["uno", "dos"], hash[:one]
     assert_equal ["uno", "dos"], hash[:two]
     # READ OVER http://www.ruby-doc.org/core-2.0.0/Hash.html#method-i-default
-    assert_equal __, hash[:three]
+    assert_equal ["uno", "dos"], hash[:three]
 
-    assert_equal __, hash[:one].object_id == hash[:two].object_id
+    assert_equal true, hash[:one].object_id == hash[:two].object_id
   end
 
   def test_default_value_with_block
     hash = Hash.new {|hash, key| hash[key] = [] }
+    #new {|hash, key| block } → new_hash
 
     hash[:one] << "uno"
     hash[:two] << "dos"
 
-    assert_equal __, hash[:one]
-    assert_equal __, hash[:two]
-    assert_equal __, hash[:three]
+    assert_equal ["uno"], hash[:one]
+    assert_equal ["dos"], hash[:two]
+    assert_equal [], hash[:three]
   end
 end
