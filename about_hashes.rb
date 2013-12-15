@@ -114,11 +114,13 @@ class AboutHashes < Neo::Koan
 
     #hash[:one]  creates hash[:one] as default, e.g. []
     hash[:one] << "uno" #appends "uno" to empty array
+    # **This is just changing the hash default, not the hash.
     # hash[:one] => ["uno"]
     # now hash.default is ["uno"]
     hash[:two] << "dos"
     # now hash.default is ["uno", "dos"]
     # hash is still {}
+    #*** this is like hash.default(1) => "uno"
 
     assert_equal ["uno", "dos"], hash[:one]
     assert_equal ["uno", "dos"], hash[:two]
