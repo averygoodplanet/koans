@@ -100,11 +100,11 @@ class AboutMethods < Neo::Koan
   end
 
   def test_calling_methods_in_same_class
-    assert_equal __, my_method_in_the_same_class(3,4)
+    assert_equal 12, my_method_in_the_same_class(3,4)
   end
 
   def test_calling_methods_in_same_class_with_explicit_receiver
-    assert_equal __, self.my_method_in_the_same_class(3,4)
+    assert_equal 12, self.my_method_in_the_same_class(3,4)
   end
 
   # ------------------------------------------------------------------
@@ -115,14 +115,35 @@ class AboutMethods < Neo::Koan
   private :my_private_method
 
   def test_calling_private_methods_without_receiver
-    assert_equal __, my_private_method
+    # this test demonstrates that you CAN call private method
+    # WITHOUT an explicit receiver
+    assert_equal "a secret", my_private_method
   end
 
   def test_calling_private_methods_with_an_explicit_receiver
-    exception = assert_raise(___) do
+=begin
+    http://weblog.jamisbuck.org/2007/2/23/method-visibility-in-ruby
+    http://weblog.jamisbuck.org/2007/2/23/method-visibility-in-ruby
+    Kinds of Methods and What They CAN Run
+
+    public (this is the default):
+          receiver explicit ("foo.bar")
+          receiver explicit self ("self.bar")
+          receiver implicit ("bar")
+
+    protected:
+          where the receiver is self (explicitly or implicitly) or same class as self
+          receiver explicit self ("self.bar")
+          receiver is same class as self ("same_class_as_self.bar")
+          receiver implicit self ("bar")
+
+    private: only implicit self works
+          receiver implicit self("bar")
+=end
+    exception = assert_raise(NoMethodError) do
       self.my_private_method
     end
-    assert_match /__/, exception.message
+    assert_match /private method/, exception.message
   end
 
   # ------------------------------------------------------------------
@@ -141,12 +162,12 @@ class AboutMethods < Neo::Koan
 
   def test_calling_methods_in_other_objects_require_explicit_receiver
     rover = Dog.new
-    assert_equal __, rover.name
+    assert_equal "Fido", rover.name
   end
 
   def test_calling_private_methods_in_other_objects
     rover = Dog.new
-    assert_raise(___) do
+    assert_raise(NoMethodError) do
       rover.tail
     end
   end
